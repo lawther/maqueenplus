@@ -88,6 +88,8 @@ class HuskyLens:
 
     _COMMAND_TIMEOUT_MS = 100
 
+    _MAX_OBJECTS_ON_SCREEN = 10
+
     def __init__(self):
         microbit.display.show(microbit.Image.NO)
         while self._I2C_HUSKYLENS_ADDR not in microbit.i2c.scan():
@@ -105,7 +107,8 @@ class HuskyLens:
         self._send_index = 0
         self._protocol_buffer = [0 for _ in range(self._PROTOCOL_SIZE)]
         self._protocol_objects = [
-            [0 for _ in range(self._PROTOCOL_OBJECT_SIZE)] for _ in range(10)
+            [0 for _ in range(self._PROTOCOL_OBJECT_SIZE)]
+            for _ in range(self._MAX_OBJECTS_ON_SCREEN)
         ]
         self._protocol_object_count = 0
         self._content_current = 0
