@@ -84,6 +84,7 @@ class HuskyLens:
     _COMMAND_REQUEST_FORGET = 0x30
     _COMMAND_REQUEST_SENSOR = 0x31
     _COMMAND_REQUEST_SET_TEXT = 0x34
+    _COMMAND_REQUEST_CLEAR_TEXT = 0x35
 
     _COMMAND_TIMEOUT_MS = 100
 
@@ -150,7 +151,7 @@ class HuskyLens:
         # self._wait(self._COMMAND_RETURN_OK)
 
     def clear_text(self):
-        self._write_algorithm(0x45, 0x35)
+        self._write_algorithm(0x45, self._COMMAND_REQUEST_CLEAR_TEXT)
 
     def get_all_boxes(self):
         ret = []
