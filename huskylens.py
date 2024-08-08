@@ -2,6 +2,42 @@ import microbit
 import time
 
 
+class Box:
+    def __init__(self, raw_bytes):
+        self.centre_x = raw_bytes[1]
+        self.centre_y = raw_bytes[2]
+        self.width = raw_bytes[3]
+        self.height = raw_bytes[4]
+        self.id = raw_bytes[5]
+
+    def __str__(self):
+        return "Box %d: centre(%d,%d) w,h(%d,%d)" % (
+            self.id,
+            self.centre_x,
+            self.centre_y,
+            self.width,
+            self.height,
+        )
+
+
+class Arrow:
+    def __init__(self, raw_bytes):
+        self.start_x = raw_bytes[1]
+        self.start_y = raw_bytes[2]
+        self.end_x = raw_bytes[3]
+        self.end_y = raw_bytes[4]
+        self.id = raw_bytes[5]
+
+    def __str__(self):
+        return "Arrow %d: start(%d,%d) end(%d,%d)" % (
+            self.id,
+            self.start_x,
+            self.start_y,
+            self.end_x,
+            self.end_y,
+        )
+
+
 class HuskyLens:
 
     ALGORITHM_FACE_RECOGNITION = 0
@@ -15,6 +51,7 @@ class HuskyLens:
 
     _FRAME_BUFFER_SIZE = 128
     _PROTOCOL_SIZE = 6
+    _PROTOCOL_OBJECT_SIZE = 6
 
     _PROTOCOL_HEADER_0_INDEX = 0
     _PROTOCOL_HEADER_1_INDEX = 1
@@ -65,7 +102,10 @@ class HuskyLens:
         self._send_buffer = bytearray(self._FRAME_BUFFER_SIZE)
         self._send_index = 0
         self._protocol_buffer = bytearray(self._PROTOCOL_SIZE)
-        self._protocol_objects = [bytearray(self._PROTOCOL_SIZE)] * 10
+        self._protocol_objects = [
+            bytearray(self._PROTOCOL_OBJECT_SIZE) for i in range(10)
+        ]
+        self._protocol_object_count = 0
         self._content_current = 0
         self._content_end = 0
         self._content_read_end = False
@@ -75,16 +115,13 @@ class HuskyLens:
             microbit.display.show(microbit.Image.NO)
             time.sleep_ms(1000)
 
+        self.clear_text()
         microbit.display.show(microbit.Image.YES)
 
     def set_mode(self, algorithm_mode):
         self._write_algorithm(algorithm_mode, self._COMMAND_REQUEST_ALGORITHM)
         result = self._wait(self._COMMAND_RETURN_OK)
         return result
-
-    def request(self):
-        self._protocol_write_command(self._COMMAND_REQUEST)
-        return self._process_return()
 
     def set_text(self, text, x=0, y=0):
         buffer = self._protocol_write_begin(self._COMMAND_REQUEST_SET_TEXT)
@@ -114,6 +151,36 @@ class HuskyLens:
 
     def clear_text(self):
         self._write_algorithm(0x45, 0x35)
+
+    def get_all_boxes(self):
+        ret = []
+        if not self._request():
+            return ret
+        for i in range(self._protocol_object_count):
+            if self._protocol_objects[i][0] == self._COMMAND_RETURN_BLOCK:
+                ret.append(Box(self._protocol_objects[i]))
+        return ret
+
+    def get_boxes_by_id(self, id):
+        ret = []
+        if not self._request():
+            return ret
+        for i in range(self._protocol_object_count):
+            if (
+                self._protocol_objects[i][0] == self._COMMAND_RETURN_BLOCK
+                and self._protocol_objects[i][5] == id
+            ):
+                ret.append(Box(self._protocol_objects[i]))
+        return ret
+
+    def get_all_arrows(self):
+        ret = []
+        if not self._request():
+            return ret
+        for i in range(self._protocol_object_count):
+            if self._protocol_objects[i][0] == self._COMMAND_RETURN_ARROW:
+                ret.append(Arrow(self._protocol_objects[i]))
+        return ret
 
     def _i2c_write(self, buf):
         print("I2C Write: ")
@@ -191,14 +258,20 @@ class HuskyLens:
                 return True
         return False
 
+    def _request(self):
+        self._protocol_write_command(self._COMMAND_REQUEST)
+        return self._process_return()
+
     def _process_return(self):
         print("Process Return")
         if not self._wait(self._COMMAND_RETURN_INFO):
+            self._protocol_object_count = 0
             return False
         print("Got _COMMAND_RETURN_INFO")
         self._protocol_read_five_int16(self._COMMAND_RETURN_INFO)
-        print("Got %d things to read back" % (self._protocol_buffer[1]))
-        for i in range(self._protocol_buffer[1]):
+        self._protocol_object_count = self._protocol_buffer[1]
+        print("Got %d things to read back" % (self._protocol_object_count))
+        for i in range(self._protocol_object_count):
             if not self._wait():
                 return False
             if self._protocol_read_five_int161(i, self._COMMAND_RETURN_BLOCK):
