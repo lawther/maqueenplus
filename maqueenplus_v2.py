@@ -214,21 +214,21 @@ class MaqueenPlusV2:
         self._i2c_write([self._LINE_TRACK_REG])
         bits = int.from_bytes(self._i2c_read(1), "big")
         if self._version_minor == 0:
-            return [
+            return (
                 (bits >> 0) & 1,
                 (bits >> 1) & 1,
                 (bits >> 2) & 1,
                 (bits >> 3) & 1,
                 (bits >> 4) & 1,
-            ]
+            )
         else:
-            return [
+            return (
                 (bits >> 4) & 1,
                 (bits >> 3) & 1,
                 (bits >> 2) & 1,
                 (bits >> 1) & 1,
                 (bits >> 0) & 1,
-            ]
+            )
 
     def hsl_to_rgb(self, h, s, l):
         # """

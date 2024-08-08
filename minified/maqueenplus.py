@@ -47,7 +47,7 @@ class MaqueenPlus:
 		if A<0:A=0
 		elif A>180:A=180
 		B._i2c_write([servo,A])
-	def line_track(B):B._i2c_write([B._LINE_TRACK_REG]);A=int.from_bytes(B._i2c_read(1),'big');return[A>>0&1,A>>1&1,A>>2&1,A>>3&1,A>>4&1,A>>5&1]
+	def line_track(B):B._i2c_write([B._LINE_TRACK_REG]);A=int.from_bytes(B._i2c_read(1),'big');return A>>0&1,A>>1&1,A>>2&1,A>>3&1,A>>4&1,A>>5&1
 	def get_wheel_rotations(B):B._i2c_write([B._MOTOR_LEFT_DISTANCE_REG]);A=B._i2c_read(4);C=(A[0]<<8|A[1])*10/900;D=(A[2]<<8|A[3])*10/900;return C,D
 	def clear_wheel_rotations(A,motor):
 		B=motor

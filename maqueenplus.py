@@ -194,14 +194,14 @@ class MaqueenPlus:
     def line_track(self):
         self._i2c_write([self._LINE_TRACK_REG])
         sensor_bits = int.from_bytes(self._i2c_read(1), "big")
-        return [
+        return (
             (sensor_bits >> 0) & 1,
             (sensor_bits >> 1) & 1,
             (sensor_bits >> 2) & 1,
             (sensor_bits >> 3) & 1,
             (sensor_bits >> 4) & 1,
             (sensor_bits >> 5) & 1,
-        ]
+        )
 
     def get_wheel_rotations(self):
         self._i2c_write([self._MOTOR_LEFT_DISTANCE_REG])
