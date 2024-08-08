@@ -1,8 +1,6 @@
 # maqueenplus
 Python driver/library for the DFRobot Maqueen Plus V1 and V2 robots
 
-
-
 # Quick Start
  - Open Microbit's MicroPython environment at https://python.microbit.org/v/3
  - Under Project, select 'Open'
