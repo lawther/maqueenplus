@@ -43,3 +43,4 @@ sleep_ms(1000)
 mq.set_underglow(*mq.COLOR_RED)
 mq.motor_stop(mq.MOTOR_BOTH)
 ```
+ - Click 'Send to micro:bit'

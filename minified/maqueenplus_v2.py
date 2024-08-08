@@ -5,14 +5,14 @@ from neopixel import NeoPixel
 class MaqueenPlusV2:
 	_I2C_ROBOT_ADDR=16;_VER_SIZE_REG=50;_VER_DATA_REG=51;_LED_LEFT_REG=11;_LED_RIGHT_REG=12;_MOTOR_LEFT_REG=0;_MOTOR_RIGHT_REG=2;_LINE_TRACK_REG=29;LED_LEFT=1;LED_RIGHT=2;LED_BOTH=3;LED_OFF=0;LED_ON=1;MOTOR_LEFT=1;MOTOR_RIGHT=2;MOTOR_BOTH=3;MOTOR_DIR_STOP=0;MOTOR_DIR_FORWARD=0;MOTOR_DIR_BACKWARD=1;SERVO_P0=0;SERVO_P1=1;SERVO_P2=2;_MAX_DIST_CM=500;COLOR_RED=255,0,0;COLOR_ORANGE_RED=255,64,0;COLOR_ORANGE=255,128,0;COLOR_YELLOW_ORANGE=255,191,0;COLOR_YELLOW=255,255,0;COLOR_YELLOW_GREEN=191,255,0;COLOR_GREEN=128,255,0;COLOR_SPRING_GREEN=64,255,0;COLOR_CYAN=0,255,255;COLOR_SKY_BLUE=0,191,255;COLOR_BLUE=0,128,255;COLOR_VIOLET_BLUE=0,64,255;COLOR_INDIGO=0,0,255;COLOR_VIOLET=64,0,255;COLOR_MAGENTA=128,0,255;COLOR_ROSE=191,0,255;COLOR_LIST_RAINBOW=[COLOR_RED,COLOR_ORANGE_RED,COLOR_ORANGE,COLOR_YELLOW_ORANGE,COLOR_YELLOW,COLOR_YELLOW_GREEN,COLOR_GREEN,COLOR_SPRING_GREEN,COLOR_CYAN,COLOR_SKY_BLUE,COLOR_BLUE,COLOR_VIOLET_BLUE,COLOR_INDIGO,COLOR_VIOLET,COLOR_MAGENTA,COLOR_ROSE];_NEO_PIXEL_COUNT=4
 	def __init__(A):
-		D=False
-		while A._I2C_ROBOT_ADDR not in microbit.i2c.scan():print('Could not find Maqueen on I2C');microbit.display.show(microbit.Image.NO);sleep_ms(1000)
-		B=D
-		while B==D:
-			E=A._get_board_version();C=E[-3:];microbit.display.scroll(C);A._version_major=int(C[0]);A._version_minor=int(C[2])
+		C=False
+		while A._I2C_ROBOT_ADDR not in microbit.i2c.scan():microbit.display.show(microbit.Image.NO);sleep_ms(1000)
+		B=C
+		while B==C:
+			E=A._get_board_version();D=E[-3:];A._version_major=int(D[0]);A._version_minor=int(D[2])
 			if A._version_major==2 and A._version_minor==1:B=True
-			if B==D:print('Version %d.%d is not supported'%(A._version_major,A._version_minor));microbit.display.show(microbit.Image.NO);sleep_ms(1000)
-		A._neo_pixel=NeoPixel(microbit.pin15,A._NEO_PIXEL_COUNT);A.motor_stop(A.MOTOR_BOTH);A.set_led_light(A.LED_BOTH,A.LED_OFF);A.set_underglow_off();microbit.display.show(microbit.Image.YES);sleep_ms(500);microbit.display.clear()
+			if B==C:microbit.display.show(microbit.Image.NO);sleep_ms(1000)
+		A._neo_pixel=NeoPixel(microbit.pin15,A._NEO_PIXEL_COUNT);A.motor_stop(A.MOTOR_BOTH);A.set_led_light(A.LED_BOTH,A.LED_OFF);A.set_underglow_off();microbit.display.show(microbit.Image.YES);microbit.display.clear()
 	def _i2c_write(A,buf):microbit.i2c.write(A._I2C_ROBOT_ADDR,bytes(buf))
 	def _i2c_read(A,count):return microbit.i2c.read(A._I2C_ROBOT_ADDR,count)
 	def _get_board_version(A):A._i2c_write([A._VER_SIZE_REG]);B=int.from_bytes(A._i2c_read(1),'big');A._i2c_write([A._VER_DATA_REG]);C=A._i2c_read(B);D=''.join([chr(A)for A in C]);return D

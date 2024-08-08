@@ -72,25 +72,28 @@ class MaqueenPlus:
         # Proceeds if the version number is one that is supported by this driver.
         # """
         while self._I2C_ROBOT_ADDR not in microbit.i2c.scan():
-            print("Could not find Maqueen on I2C")
+            if __debug__:
+                print("Could not find Maqueen on I2C")
             microbit.display.show(microbit.Image.NO)
             sleep_ms(1000)
 
         valid_version = False
         while valid_version == False:
             version = self._get_board_version()
-            # print("Found Maqueen Board " + version)
             version_num = version[-3:]
-            microbit.display.scroll(version_num)
+            if __debug__:
+                print("Found Maqueen Board " + version)
+                microbit.display.scroll(version_num)
             self._version_major = int(version_num[0])
             self._version_minor = int(version_num[2])
             if self._version_major == 1 and self._version_minor == 4:
                 valid_version = True
             if valid_version == False:
-                print(
-                    "Version %d.%d is not supported"
-                    % (self._version_major, self._version_minor)
-                )
+                if __debug__:
+                    print(
+                        "Version %d.%d is not supported"
+                        % (self._version_major, self._version_minor)
+                    )
                 microbit.display.show(microbit.Image.NO)
                 sleep_ms(1000)
         self._ultrasonic_state = 0
@@ -102,7 +105,8 @@ class MaqueenPlus:
         self.clear_wheel_rotations(self.MOTOR_BOTH)
 
         microbit.display.show(microbit.Image.YES)
-        sleep_ms(500)
+        if __debug__:
+            sleep_ms(500)
         microbit.display.clear()
 
     def _i2c_write(self, buf):
