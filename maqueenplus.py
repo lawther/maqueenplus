@@ -1,4 +1,5 @@
 import machine
+import math
 from time import sleep_ms
 
 import microbit
@@ -20,9 +21,14 @@ class MaqueenPlus:
     # Motors
     _MOTOR_LEFT_REG = 0x00
     _MOTOR_RIGHT_REG = 0x02
+    _MOTOR_LEFT_DISTANCE_REG = 0x04
+    _MOTOR_RIGHT_DISTANCE_REG = 0x06
 
     # Line Tracking Sensors
     _LINE_TRACK_REG = 0x1D
+
+    # Wheel diameter
+    _WHEEL_DIAMETER_MM = 42
 
     # RGB LEDs aka headlights
     RGB_LEFT = 1
@@ -90,8 +96,10 @@ class MaqueenPlus:
         self._ultrasonic_state = 0
         self._ultrasonic_trigger_pin = ultrasonic_green_pin
         self._ultrasonic_echo_pin = ultrasonic_blue_pin
+        self._wheel_diameter_mm = self._WHEEL_DIAMETER_MM
         self.set_rgb_light(self.RGB_BOTH, self.COLOR_OFF)
         self.motor_stop(self.MOTOR_BOTH)
+        self.clear_wheel_rotations(self.MOTOR_BOTH)
 
         microbit.display.show(microbit.Image.YES)
         sleep_ms(500)
@@ -125,7 +133,7 @@ class MaqueenPlus:
             speed = 240
 
         if motor == self.MOTOR_LEFT:
-            self._i2c_write([self._MOTOR_LEFT_REG, dir, speed])
+            self._i2c_write(buf=[self._MOTOR_LEFT_REG, dir, speed])
         elif motor == self.MOTOR_RIGHT:
             self._i2c_write([self._MOTOR_RIGHT_REG, dir, speed])
         elif motor == self.MOTOR_BOTH:
@@ -194,3 +202,28 @@ class MaqueenPlus:
             (sensor_bits >> 4) & 1,
             (sensor_bits >> 5) & 1,
         ]
+
+    def get_wheel_rotations(self):
+        self._i2c_write([self._MOTOR_LEFT_DISTANCE_REG])
+        raw_rotations = self._i2c_read(4)
+        rotation_left = ((raw_rotations[0] << 8 | raw_rotations[1]) * 10) / 900
+        rotation_right = ((raw_rotations[2] << 8 | raw_rotations[3]) * 10) / 900
+        return (rotation_left, rotation_right)
+
+    def clear_wheel_rotations(self, motor):
+        if motor == self.MOTOR_LEFT:
+            self._i2c_write(buf=[self._MOTOR_LEFT_DISTANCE_REG, 0, 0])
+        elif motor == self.MOTOR_RIGHT:
+            self._i2c_write(buf=[self._MOTOR_RIGHT_DISTANCE_REG, 0, 0])
+        elif motor == self.MOTOR_BOTH:
+            self._i2c_write(buf=[self._MOTOR_LEFT_DISTANCE_REG, 0, 0, 0, 0])
+
+    def set_wheel_diameter_mm(self, new_diameter_mm: int):
+        self._wheel_diameter_mm = new_diameter_mm
+
+    def get_wheel_distance_cm(self):
+        rotation_left, rotation_right = self.get_wheel_rotations()
+        distance_left_cm = (rotation_left * math.pi * self._wheel_diameter_mm) / 10
+        distance_right_cm = (rotation_right * math.pi * self._wheel_diameter_mm) / 10
+
+        return (distance_left_cm, distance_right_cm)
