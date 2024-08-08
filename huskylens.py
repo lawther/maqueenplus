@@ -103,9 +103,9 @@ class HuskyLens:
         self._receive_buffer = bytearray(self._FRAME_BUFFER_SIZE)
         self._send_buffer = bytearray(self._FRAME_BUFFER_SIZE)
         self._send_index = 0
-        self._protocol_buffer = bytearray(self._PROTOCOL_SIZE)
+        self._protocol_buffer = [0 for _ in range(self._PROTOCOL_SIZE)]
         self._protocol_objects = [
-            bytearray(self._PROTOCOL_OBJECT_SIZE) for i in range(10)
+            [0 for _ in range(self._PROTOCOL_OBJECT_SIZE)] for _ in range(10)
         ]
         self._protocol_object_count = 0
         self._content_current = 0

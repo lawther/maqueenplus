@@ -13,7 +13,7 @@ class HuskyLens:
 	def __init__(A):
 		microbit.display.show(microbit.Image.NO)
 		while A._I2C_HUSKYLENS_ADDR not in microbit.i2c.scan():microbit.display.show(microbit.Image.NO);time.sleep_ms(1000)
-		A._m_i=16;A._last_cmd_sent=[];A._send_fail=_A;A._receive_index=0;A._receive_buffer=bytearray(A._FRAME_BUFFER_SIZE);A._send_buffer=bytearray(A._FRAME_BUFFER_SIZE);A._send_index=0;A._protocol_buffer=bytearray(A._PROTOCOL_SIZE);A._protocol_objects=[bytearray(A._PROTOCOL_OBJECT_SIZE)for B in range(10)];A._protocol_object_count=0;A._content_current=0;A._content_end=0;A._content_read_end=_A
+		A._m_i=16;A._last_cmd_sent=[];A._send_fail=_A;A._receive_index=0;A._receive_buffer=bytearray(A._FRAME_BUFFER_SIZE);A._send_buffer=bytearray(A._FRAME_BUFFER_SIZE);A._send_index=0;A._protocol_buffer=[0 for A in range(A._PROTOCOL_SIZE)];A._protocol_objects=[[0 for A in range(A._PROTOCOL_OBJECT_SIZE)]for B in range(10)];A._protocol_object_count=0;A._content_current=0;A._content_end=0;A._content_read_end=_A
 		while not A._knock():microbit.display.show(microbit.Image.NO);time.sleep_ms(1000)
 		A.clear_text();microbit.display.show(microbit.Image.YES)
 	def set_mode(A,algorithm_mode):A._write_algorithm(algorithm_mode,A._COMMAND_REQUEST_ALGORITHM);B=A._wait(A._COMMAND_RETURN_OK);return B
