@@ -91,7 +91,8 @@ class HuskyLens:
     def __init__(self):
         microbit.display.show(microbit.Image.NO)
         while self._I2C_HUSKYLENS_ADDR not in microbit.i2c.scan():
-            print("Could not find HuskyLens on I2c")
+            if __debug__:
+                print("Could not find HuskyLens on I2c")
             microbit.display.show(microbit.Image.NO)
             time.sleep_ms(1000)
 
@@ -112,7 +113,8 @@ class HuskyLens:
         self._content_read_end = False
 
         while not self._knock():
-            print("Could not communicate with HuskyLens")
+            if __debug__:
+                print("Could not communicate with HuskyLens")
             microbit.display.show(microbit.Image.NO)
             time.sleep_ms(1000)
 
