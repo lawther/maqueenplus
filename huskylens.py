@@ -3,12 +3,12 @@ import time
 
 
 class Box:
-    def __init__(self, raw_bytes):
-        self.centre_x = raw_bytes[1]
-        self.centre_y = raw_bytes[2]
-        self.width = raw_bytes[3]
-        self.height = raw_bytes[4]
-        self.id = raw_bytes[5]
+    def __init__(self, raw_array):
+        self.centre_x = raw_array[1]
+        self.centre_y = raw_array[2]
+        self.width = raw_array[3]
+        self.height = raw_array[4]
+        self.id = raw_array[5]
 
     def __str__(self):
         return "Box %d: centre(%d,%d) w,h(%d,%d)" % (
@@ -21,12 +21,12 @@ class Box:
 
 
 class Arrow:
-    def __init__(self, raw_bytes):
-        self.start_x = raw_bytes[1]
-        self.start_y = raw_bytes[2]
-        self.end_x = raw_bytes[3]
-        self.end_y = raw_bytes[4]
-        self.id = raw_bytes[5]
+    def __init__(self, raw_array):
+        self.start_x = raw_array[1]
+        self.start_y = raw_array[2]
+        self.end_x = raw_array[3]
+        self.end_y = raw_array[4]
+        self.id = raw_array[5]
 
     def __str__(self):
         return "Arrow %d: start(%d,%d) end(%d,%d)" % (
@@ -186,14 +186,14 @@ class HuskyLens:
         return ret
 
     def _i2c_write(self, buf):
-        print("I2C Write: ")
-        print(" ".join("0x%02X" % (byte) for byte in buf))
+        # print("I2C Write: ")
+        # print(" ".join("0x%02X" % (byte) for byte in buf))
         microbit.i2c.write(self._I2C_HUSKYLENS_ADDR, bytes(buf))
 
     def _i2c_read(self, count):
         buf = microbit.i2c.read(self._I2C_HUSKYLENS_ADDR, count)
-        print("I2C Read: ")
-        print(" ".join("0x%02X" % (byte) for byte in buf))
+        # print("I2C Read: ")
+        # print(" ".join("0x%02X" % (byte) for byte in buf))
         return buf
 
     def _write_algorithm(self, algorithm_mode, command=0):
@@ -266,22 +266,22 @@ class HuskyLens:
         return self._process_return()
 
     def _process_return(self):
-        print("Process Return")
+        # print("Process Return")
         if not self._wait(self._COMMAND_RETURN_INFO):
             self._protocol_object_count = 0
             return False
-        print("Got _COMMAND_RETURN_INFO")
+        # print("Got _COMMAND_RETURN_INFO")
         self._protocol_read_five_int16(self._COMMAND_RETURN_INFO)
         self._protocol_object_count = self._protocol_buffer[1]
-        print("Got %d things to read back" % (self._protocol_object_count))
+        # print("Got %d things to read back" % (self._protocol_object_count))
         for i in range(self._protocol_object_count):
             if not self._wait():
                 return False
             if self._protocol_read_five_int161(i, self._COMMAND_RETURN_BLOCK):
-                print("Got a block")
+                # print("Got a block")
                 continue
             elif self._protocol_read_five_int161(i, self._COMMAND_RETURN_ARROW):
-                print("Got an arrow")
+                # print("Got an arrow")
                 continue
             else:
                 return False
@@ -337,7 +337,7 @@ class HuskyLens:
         return False
 
     def _protocol_available(self):
-        print("Protocol Available, self._m_i = %d" % (self._m_i))
+        # print("Protocol Available, self._m_i = %d" % (self._m_i))
         buf = bytearray(16)
         if self._m_i == 16:
             buf = self._i2c_read(16)
@@ -359,7 +359,7 @@ class HuskyLens:
         return False
 
     def _protocol_read_five_int16(self, command=0):
-        print("Reading 5 int16")
+        # print("Reading 5 int16")
         if not self._protocol_read_begin(command):
             return False
 
@@ -372,7 +372,7 @@ class HuskyLens:
         return self._protocol_read_end()
 
     def _protocol_read_five_int161(self, i, command=0):
-        print("Reading 5 int16 into slot %d" % (i))
+        # print("Reading 5 int16 into slot %d" % (i))
         if not self._protocol_read_begin(command):
             return False
 
@@ -393,7 +393,7 @@ class HuskyLens:
             | self._receive_buffer[self._content_current]
         )
         self._content_current += 2
-        print("Read int16: %04x" % (result))
+        # print("Read int16: %04x" % (result))
         return result
 
     def _protocol_read_end(self):
@@ -403,7 +403,7 @@ class HuskyLens:
         return self._content_current == self._content_end
 
     def _wait(self, command=0):
-        print("Wait, command=%d" % (command))
+        # print("Wait, command=%d" % (command))
         start_time = time.ticks_ms()
         while (time.ticks_ms() - start_time) < self._COMMAND_TIMEOUT_MS:
             if self._protocol_available():
