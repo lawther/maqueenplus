@@ -158,7 +158,7 @@ class HuskyLens:
     def clear_text(self):
         self._write_algorithm(0x45, self._COMMAND_REQUEST_CLEAR_TEXT)
 
-    def get_all_boxes(self):
+    def get_all_boxes(self) -> list[Box]:
         ret = []
         if not self._request():
             return ret
@@ -167,7 +167,7 @@ class HuskyLens:
                 ret.append(Box(self._protocol_objects[i]))
         return ret
 
-    def get_boxes_by_id(self, id):
+    def get_boxes_by_id(self, id) -> list[Box]:
         ret = []
         if not self._request():
             return ret
@@ -179,7 +179,7 @@ class HuskyLens:
                 ret.append(Box(self._protocol_objects[i]))
         return ret
 
-    def get_all_arrows(self):
+    def get_all_arrows(self) -> list[Arrow]:
         ret = []
         if not self._request():
             return ret
