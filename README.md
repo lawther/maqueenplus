@@ -28,12 +28,12 @@ mq.motor_stop(mq.MOTOR_BOTH)
 or
 ```python
 from micropython import const
-import maqueenplus_v2
+import maqueenplusv2
 from time import sleep_ms
 
 _MOTOR_SPEED = const(50)
 
-mq = maqueenplus_v2.MaqueenPlusV2()
+mq = maqueenplusv2.MaqueenPlusV2()
 
 mq.set_underglow(*mq.COLOR_GREEN)
 mq.motor_run(mq.MOTOR_BOTH, mq.MOTOR_DIR_FORWARD, _MOTOR_SPEED)

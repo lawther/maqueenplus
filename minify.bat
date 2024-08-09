@@ -2,7 +2,7 @@
 setlocal
 
 call :minify maqueenplus.py
-call :minify maqueenplus_v2.py
+call :minify maqueenplusv2.py
 call :minify huskylens.py
 echo Minification complete
 goto :EOF
