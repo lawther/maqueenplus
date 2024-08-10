@@ -45,8 +45,8 @@ class MaqueenPlusV2:
 		elif C==B.SERVO_P2:microbit.pin2.write_analog(A)
 	def line_track(B):
 		B._i2c_write([B._LINE_TRACK_REG]);A=int.from_bytes(B._i2c_read(1),'big')
-		if B._version_minor==0:return A>>0&1,A>>1&1,A>>2&1,A>>3&1,A>>4&1
-		else:return A>>4&1,A>>3&1,A>>2&1,A>>1&1,A>>0&1
+		if B._version_minor==0:return A>>0&1==1,A>>1&1==1,A>>2&1==1,A>>3&1==1,A>>4&1==1
+		else:return A>>4&1==1,A>>3&1==1,A>>2&1==1,A>>1&1==1,A>>0&1==1
 	def hsl_to_rgb(G,h,s,l):
 		D=(1-abs(2*l-1))*s;E=D*(1-abs(h/60%2-1));F=l-D/2
 		if 0<=h<60:A,B,C=D,E,0
