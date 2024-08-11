@@ -214,7 +214,7 @@ class MaqueenPlusV2:
         elif servo_id == self.SERVO_P2:
             microbit.pin2.write_analog(angle)
 
-    def line_track(self) -> tuple[bool, bool, bool, bool, bool]:
+    def line_track(self):
         self._i2c_write([self._LINE_TRACK_REG])
         bits = int.from_bytes(self._i2c_read(1), "big")
         if self._version_minor == 0:

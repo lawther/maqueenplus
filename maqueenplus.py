@@ -195,7 +195,7 @@ class MaqueenPlus:
             angle = 180
         self._i2c_write([servo, angle])
 
-    def line_track(self) -> tuple[bool, bool, bool, bool, bool, bool]:
+    def line_track(self):
         self._i2c_write([self._LINE_TRACK_REG])
         sensor_bits = int.from_bytes(self._i2c_read(1), "big")
         return (
