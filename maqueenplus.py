@@ -30,10 +30,10 @@ class MaqueenPlus:
     # Wheel diameter
     _WHEEL_DIAMETER_MM = 42
 
-    # RGB LEDs aka headlights
-    RGB_LEFT = 1
-    RGB_RIGHT = 2
-    RGB_BOTH = 3
+    # RGB Headlights
+    HEADLIGHT_LEFT = 1
+    HEADLIGHT_RIGHT = 2
+    HEADLIGHT_BOTH = 3
 
     # Colors for the RGB LEDs
     COLOR_RED = 1
@@ -100,7 +100,7 @@ class MaqueenPlus:
         self._ultrasonic_trigger_pin = ultrasonic_green_pin
         self._ultrasonic_echo_pin = ultrasonic_blue_pin
         self._wheel_diameter_mm = self._WHEEL_DIAMETER_MM
-        self.set_rgb_light(self.RGB_BOTH, self.COLOR_OFF)
+        self.set_headlight_rgb(self.HEADLIGHT_BOTH, self.COLOR_OFF)
         self.motor_stop(self.MOTOR_BOTH)
         self.clear_wheel_rotations(self.MOTOR_BOTH)
 
@@ -124,12 +124,12 @@ class MaqueenPlus:
         version_str = "".join([chr(b) for b in version_bytes])
         return version_str
 
-    def set_rgb_light(self, light, color):
-        if light == self.RGB_LEFT:
+    def set_headlight_rgb(self, light, color):
+        if light == self.HEADLIGHT_LEFT:
             self._i2c_write([self._RGB_LEFT_REG, color])
-        elif light == self.RGB_RIGHT:
+        elif light == self.HEADLIGHT_RIGHT:
             self._i2c_write([self._RGB_RIGHT_REG, color])
-        elif light == self.RGB_BOTH:
+        elif light == self.HEADLIGHT_BOTH:
             self._i2c_write([self._RGB_LEFT_REG, color, color])
 
     def motor_run(self, motor, dir, speed):

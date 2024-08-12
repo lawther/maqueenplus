@@ -26,10 +26,10 @@ class MaqueenPlusV2:
     # Line Tracking Sensors
     _LINE_TRACK_REG = 0x1D
 
-    # Front LEDs aka headlights
-    LED_LEFT = 1
-    LED_RIGHT = 2
-    LED_BOTH = 3
+    # Front Headlights
+    HEADLIGHT_LEFT = 1
+    HEADLIGHT_RIGHT = 2
+    HEADLIGHT_BOTH = 3
 
     # State for the LEDs
     LED_OFF = 0
@@ -126,7 +126,7 @@ class MaqueenPlusV2:
         # print("Version " + str(_version_major) + "." + str(_version_minor) + " is supported!")
         self._neo_pixel = NeoPixel(microbit.pin15, self._NEO_PIXEL_COUNT)
         self.motor_stop(self.MOTOR_BOTH)
-        self.set_led_light(self.LED_BOTH, self.LED_OFF)
+        self.set_headlight(self.HEADLIGHT_BOTH, self.LED_OFF)
         self.set_underglow_off()
 
         microbit.display.show(microbit.Image.YES)
@@ -149,12 +149,12 @@ class MaqueenPlusV2:
         version_str = "".join([chr(b) for b in version_bytes])
         return version_str
 
-    def set_led_light(self, light: int, state: int):
-        if light == self.LED_LEFT:
+    def set_headlight(self, light: int, state: int):
+        if light == self.HEADLIGHT_LEFT:
             self._i2c_write([self._LED_LEFT_REG, state])
-        elif light == self.LED_RIGHT:
+        elif light == self.HEADLIGHT_RIGHT:
             self._i2c_write([self._LED_RIGHT_REG, state])
-        elif light == self.LED_BOTH:
+        elif light == self.HEADLIGHT_BOTH:
             self._i2c_write([self._LED_LEFT_REG, state, state])
 
     def motor_run(self, motor, dir, speed):
