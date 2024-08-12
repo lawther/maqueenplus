@@ -57,10 +57,10 @@ class MaqueenPlusV2:
 		elif 300<=h<360:A,B,C=D,0,E
 		else:A,B,C=0,0,0
 		A=(A+F)*255;B=(B+F)*255;C=(C+F)*255;return int(A),int(B),int(C)
-	def set_underglow_light(A,light,r,g,b):
+	def set_underglow_light(A,light,rgb_tuple):
 		B=light
-		if B>0 and B<A._NEO_PIXEL_COUNT:A._neo_pixel[B]=r,g,b;A._neo_pixel.show()
-	def set_underglow(A,r,g,b):
-		for B in range(A._NEO_PIXEL_COUNT):A._neo_pixel[B]=r,g,b
+		if B>=0 and B<A._NEO_PIXEL_COUNT:A._neo_pixel[B]=rgb_tuple;A._neo_pixel.show()
+	def set_underglow(A,rgb_tuple):
+		for B in range(A._NEO_PIXEL_COUNT):A._neo_pixel[B]=rgb_tuple
 		A._neo_pixel.show()
-	def set_underglow_off(A):A.set_underglow(0,0,0)
+	def set_underglow_off(A):A.set_underglow((0,0,0))
