@@ -27,7 +27,7 @@ class MaqueenPlus:
 		elif C==A.MOTOR_RIGHT:A._i2c_write([A._MOTOR_RIGHT_REG,dir,B])
 		elif C==A.MOTOR_BOTH:A._i2c_write([A._MOTOR_LEFT_REG,dir,B,dir,B])
 	def motor_stop(A,motor):A.motor_run(motor,A.MOTOR_DIR_STOP,0)
-	def get_range(A):
+	def get_range_cm(A):
 		B=A._read_ultrasonic()
 		if A._ultrasonic_state==1 and B!=0:A._ultrasonic_state=0
 		C=0

@@ -171,7 +171,7 @@ class MaqueenPlusV2:
     def motor_stop(self, motor):
         self.motor_run(motor, self.MOTOR_DIR_STOP, 0)
 
-    def get_range(self):
+    def get_range_cm(self):
         trigger_pin = microbit.pin13
         echo_pin = microbit.pin14
 

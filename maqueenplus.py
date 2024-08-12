@@ -146,7 +146,7 @@ class MaqueenPlus:
     def motor_stop(self, motor):
         self.motor_run(motor, self.MOTOR_DIR_STOP, 0)
 
-    def get_range(self):
+    def get_range_cm(self):
         # """Returns a range in cm from 2 to 500"""
 
         data = self._read_ultrasonic()

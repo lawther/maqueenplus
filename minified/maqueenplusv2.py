@@ -28,7 +28,7 @@ class MaqueenPlusV2:
 		elif C==A.MOTOR_RIGHT:A._i2c_write([A._MOTOR_RIGHT_REG,dir,B])
 		elif C==A.MOTOR_BOTH:A._i2c_write([A._MOTOR_LEFT_REG,dir,B,dir,B])
 	def motor_stop(A,motor):A.motor_run(motor,A.MOTOR_DIR_STOP,0)
-	def get_range(B):
+	def get_range_cm(B):
 		A=microbit.pin13;C=microbit.pin14;A.write_digital(1);sleep_ms(1);A.write_digital(0)
 		if C.read_digital()==0:A.write_digital(0);A.write_digital(1);sleep_ms(20);A.write_digital(0);E=machine.time_pulse_us(C,1,B._MAX_DIST_CM*58)
 		else:A.write_digital(1);A.write_digital(0);sleep_ms(20);A.write_digital(0);E=machine.time_pulse_us(C,0,B._MAX_DIST_CM*58)
