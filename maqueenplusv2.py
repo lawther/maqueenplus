@@ -171,6 +171,20 @@ class MaqueenPlusV2:
     def motor_stop(self, motor):
         self.motor_run(motor, self.MOTOR_DIR_STOP, 0)
 
+    def drive_foward(self, speed):
+        self.motor_run(self.MOTOR_BOTH, self.MOTOR_DIR_FORWARD, speed)
+
+    def drive_backward(self, speed):
+        self.motor_run(self.MOTOR_BOTH, self.MOTOR_DIR_BACKWARD, speed)
+
+    def spin_left(self, speed):
+        self.motor_run(self.MOTOR_LEFT, self.MOTOR_DIR_BACKWARD, speed)
+        self.motor_run(self.MOTOR_RIGHT, self.MOTOR_DIR_FORWARD, speed)
+
+    def spin_right(self, speed):
+        self.motor_run(self.MOTOR_LEFT, self.MOTOR_DIR_FORWARD, speed)
+        self.motor_run(self.MOTOR_RIGHT, self.MOTOR_DIR_BACKWARD, speed)
+
     def get_range_cm(self):
         trigger_pin = microbit.pin13
         echo_pin = microbit.pin14
