@@ -65,8 +65,8 @@ class MaqueenPlus:
 
     def __init__(
         self,
-        ultrasonic_green_pin: microbit.MicroBitDigitalPin,
-        ultrasonic_blue_pin: microbit.MicroBitDigitalPin,
+        ultrasonic_trigger_pin: microbit.MicroBitDigitalPin,
+        ultrasonic_echo_pin: microbit.MicroBitDigitalPin,
     ):
         # """Checks we can communicate with the robot.
         # Proceeds if the version number is one that is supported by this driver.
@@ -97,8 +97,8 @@ class MaqueenPlus:
                 microbit.display.show(microbit.Image.NO)
                 sleep_ms(1000)
         self._ultrasonic_state = 0
-        self._ultrasonic_trigger_pin = ultrasonic_green_pin
-        self._ultrasonic_echo_pin = ultrasonic_blue_pin
+        self._ultrasonic_trigger_pin = ultrasonic_trigger_pin
+        self._ultrasonic_echo_pin = ultrasonic_echo_pin
         self._wheel_diameter_mm = self._WHEEL_DIAMETER_MM
         self.set_headlight_rgb(self.HEADLIGHT_BOTH, self.COLOR_OFF)
         self.motor_stop(self.MOTOR_BOTH)

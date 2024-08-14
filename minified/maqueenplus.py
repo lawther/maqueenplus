@@ -3,7 +3,7 @@ from time import sleep_ms
 import microbit
 class MaqueenPlus:
 	_I2C_ROBOT_ADDR=16;_VER_SIZE_REG=50;_VER_DATA_REG=51;_RGB_LEFT_REG=11;_RGB_RIGHT_REG=12;_MOTOR_LEFT_REG=0;_MOTOR_RIGHT_REG=2;_MOTOR_LEFT_DISTANCE_REG=4;_MOTOR_RIGHT_DISTANCE_REG=6;_LINE_TRACK_REG=29;_WHEEL_DIAMETER_MM=42;HEADLIGHT_LEFT=1;HEADLIGHT_RIGHT=2;HEADLIGHT_BOTH=3;COLOR_RED=1;COLOR_GREEN=2;COLOR_YELLOW=3;COLOR_BLUE=4;COLOR_PINK=5;COLOR_CYAN=6;COLOR_WHITE=7;COLOR_OFF=8;MOTOR_LEFT=1;MOTOR_RIGHT=2;MOTOR_BOTH=3;MOTOR_DIR_STOP=0;MOTOR_DIR_FORWARD=1;MOTOR_DIR_BACKWARD=2;SERVO_S1=20;SERVO_S2=21;SERVO_S3=22;_MAX_DIST_CM=500
-	def __init__(A,ultrasonic_green_pin,ultrasonic_blue_pin):
+	def __init__(A,ultrasonic_trigger_pin,ultrasonic_echo_pin):
 		C=False
 		while A._I2C_ROBOT_ADDR not in microbit.i2c.scan():microbit.display.show(microbit.Image.NO);sleep_ms(1000)
 		B=C
@@ -11,7 +11,7 @@ class MaqueenPlus:
 			E=A._get_board_version();D=E[-3:];A._version_major=int(D[0]);A._version_minor=int(D[2])
 			if A._version_major==1 and A._version_minor==4:B=True
 			if B==C:microbit.display.show(microbit.Image.NO);sleep_ms(1000)
-		A._ultrasonic_state=0;A._ultrasonic_trigger_pin=ultrasonic_green_pin;A._ultrasonic_echo_pin=ultrasonic_blue_pin;A._wheel_diameter_mm=A._WHEEL_DIAMETER_MM;A.set_headlight_rgb(A.HEADLIGHT_BOTH,A.COLOR_OFF);A.motor_stop(A.MOTOR_BOTH);A.clear_wheel_rotations(A.MOTOR_BOTH);microbit.display.show(microbit.Image.YES);microbit.display.clear()
+		A._ultrasonic_state=0;A._ultrasonic_trigger_pin=ultrasonic_trigger_pin;A._ultrasonic_echo_pin=ultrasonic_echo_pin;A._wheel_diameter_mm=A._WHEEL_DIAMETER_MM;A.set_headlight_rgb(A.HEADLIGHT_BOTH,A.COLOR_OFF);A.motor_stop(A.MOTOR_BOTH);A.clear_wheel_rotations(A.MOTOR_BOTH);microbit.display.show(microbit.Image.YES);microbit.display.clear()
 	def _i2c_write(A,buf):microbit.i2c.write(A._I2C_ROBOT_ADDR,bytes(buf))
 	def _i2c_read(A,count):return microbit.i2c.read(A._I2C_ROBOT_ADDR,count)
 	def _get_board_version(A):A._i2c_write([A._VER_SIZE_REG]);B=int.from_bytes(A._i2c_read(1),'big');A._i2c_write([A._VER_DATA_REG]);C=A._i2c_read(B);D=''.join([chr(A)for A in C]);return D
