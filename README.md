@@ -15,7 +15,7 @@ Python driver/library for the DFRobot Maqueen Plus V1 and V2 robots. And also th
 
  If you see errors like this, then you will need to use the versions in the 'minified' directory. Simply substitute the minified file for the original file.
 
- The minified files were produced with https://github.com/dflook/python-minifier. They are functionally identical, except they have had any code wrapped in `__debug__` stripped out.
+ The minified files were firstly processed to rename any names beginning with an underscore with a minimal name (using minimal_renamer.py), and then processed with https://github.com/dflook/python-minifier. They are functionally identical, except they have had any code wrapped in `__debug__` stripped out.
 
  # HuskyLens Firmware Version
  This driver expects that you are using at least firmware V0.5.1a. Instructions for updating are given at https://wiki.dfrobot.com/HUSKYLENS_V1.0_SKU_SEN0305_SEN0336#target_5
