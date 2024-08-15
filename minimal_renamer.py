@@ -11,6 +11,8 @@ from typing import Generator
 # Usage: python minimal-renamer.py filename.py
 # Output: filename-min.py
 #
+# Inspired by https://github.com/0sir1ss/Carbon
+#
 
 
 def minimal_name_generator() -> Generator[str, None, None]:
