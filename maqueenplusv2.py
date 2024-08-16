@@ -93,7 +93,11 @@ class MaqueenPlusV2:
     # NeoPixel / underglow
     _NEO_PIXEL_COUNT = 4
 
-    def __init__(self):
+    def __init__(
+        self,
+        ultrasonic_trigger_pin: microbit.MicroBitDigitalPin = microbit.pin13,
+        ultrasonic_echo_pin: microbit.MicroBitDigitalPin = microbit.pin14,
+    ):
         # """Checks we can communicate with the robot.
         # Proceeds if the version number is one that is supported by this driver.
         # """
@@ -124,6 +128,9 @@ class MaqueenPlusV2:
                 sleep_ms(1000)
 
         # print("Version " + str(_version_major) + "." + str(_version_minor) + " is supported!")
+        self._ultrasonic_trigger_pin = ultrasonic_trigger_pin
+        self._ultrasonic_echo_pin = ultrasonic_echo_pin
+
         self._neo_pixel = NeoPixel(microbit.pin15, self._NEO_PIXEL_COUNT)
         self.motor_stop(self.MOTOR_BOTH)
         self.set_headlight(self.HEADLIGHT_BOTH, self.LED_OFF)
@@ -186,24 +193,25 @@ class MaqueenPlusV2:
         self.motor_run(self.MOTOR_RIGHT, self.MOTOR_DIR_BACKWARD, speed)
 
     def get_range_cm(self):
-        trigger_pin = microbit.pin13
-        echo_pin = microbit.pin14
-
-        trigger_pin.write_digital(1)
+        self._ultrasonic_trigger_pin.write_digital(1)
         sleep_ms(1)
-        trigger_pin.write_digital(0)
-        if echo_pin.read_digital() == 0:
-            trigger_pin.write_digital(0)
-            trigger_pin.write_digital(1)
+        self._ultrasonic_trigger_pin.write_digital(0)
+        if self._ultrasonic_echo_pin.read_digital() == 0:
+            self._ultrasonic_trigger_pin.write_digital(0)
+            self._ultrasonic_trigger_pin.write_digital(1)
             sleep_ms(20)
-            trigger_pin.write_digital(0)
-            d = machine.time_pulse_us(echo_pin, 1, self._MAX_DIST_CM * 58)
+            self._ultrasonic_trigger_pin.write_digital(0)
+            d = machine.time_pulse_us(
+                self._ultrasonic_echo_pin, 1, self._MAX_DIST_CM * 58
+            )
         else:
-            trigger_pin.write_digital(1)
-            trigger_pin.write_digital(0)
+            self._ultrasonic_trigger_pin.write_digital(1)
+            self._ultrasonic_trigger_pin.write_digital(0)
             sleep_ms(20)
-            trigger_pin.write_digital(0)
-            d = machine.time_pulse_us(echo_pin, 0, self._MAX_DIST_CM * 58)
+            self._ultrasonic_trigger_pin.write_digital(0)
+            d = machine.time_pulse_us(
+                self._ultrasonic_echo_pin, 0, self._MAX_DIST_CM * 58
+            )
 
         x = d / 59
 
