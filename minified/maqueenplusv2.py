@@ -28,7 +28,7 @@ class MaqueenPlusV2:
 		elif C==2:B._c([2,dir,A])
 		elif C==3:B._c([0,dir,A,dir,A])
 	def motor_stop(A,motor):A.motor_run(motor,0,0)
-	def drive_foward(A,speed):A.motor_run(3,0,speed)
+	def drive_forward(A,speed):A.motor_run(3,0,speed)
 	def drive_backward(A,speed):A.motor_run(3,1,speed)
 	def spin_left(A,speed):B=speed;A.motor_run(1,1,B);A.motor_run(2,0,B)
 	def spin_right(A,speed):B=speed;A.motor_run(1,0,B);A.motor_run(2,1,B)
