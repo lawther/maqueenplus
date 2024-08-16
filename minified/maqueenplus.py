@@ -34,8 +34,9 @@ class MaqueenPlus:
 	def motor_stop(A,motor):A.motor_run(motor,0,0)
 	def drive_forward(A,speed):A.motor_run(3,1,speed)
 	def drive_backward(A,speed):A.motor_run(3,2,speed)
-	def spin_left(A,speed):B=speed;A.motor_run(1,2,B);A.motor_run(2,1,B)
-	def spin_right(A,speed):B=speed;A.motor_run(1,1,B);A.motor_run(2,2,B)
+	def drive_stop(A,speed):A.motor_stop(3)
+	def drive_spin_left(A,speed):B=speed;A.motor_run(1,2,B);A.motor_run(2,1,B)
+	def drive_spin_right(A,speed):B=speed;A.motor_run(1,1,B);A.motor_run(2,2,B)
 	def get_range_cm(A):
 		if A._j is _A or A._g is _A:return-1
 		if A._h==1:return A._b()

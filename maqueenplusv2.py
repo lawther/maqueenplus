@@ -184,11 +184,14 @@ class MaqueenPlusV2:
     def drive_backward(self, speed):
         self.motor_run(self.MOTOR_BOTH, self.MOTOR_DIR_BACKWARD, speed)
 
-    def spin_left(self, speed):
+    def drive_stop(self, speed):
+        self.motor_stop(self.MOTOR_BOTH)
+
+    def drive_spin_left(self, speed):
         self.motor_run(self.MOTOR_LEFT, self.MOTOR_DIR_BACKWARD, speed)
         self.motor_run(self.MOTOR_RIGHT, self.MOTOR_DIR_FORWARD, speed)
 
-    def spin_right(self, speed):
+    def drive_spin_right(self, speed):
         self.motor_run(self.MOTOR_LEFT, self.MOTOR_DIR_FORWARD, speed)
         self.motor_run(self.MOTOR_RIGHT, self.MOTOR_DIR_BACKWARD, speed)
 

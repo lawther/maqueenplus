@@ -30,8 +30,9 @@ class MaqueenPlusV2:
 	def motor_stop(A,motor):A.motor_run(motor,0,0)
 	def drive_forward(A,speed):A.motor_run(3,0,speed)
 	def drive_backward(A,speed):A.motor_run(3,1,speed)
-	def spin_left(A,speed):B=speed;A.motor_run(1,1,B);A.motor_run(2,0,B)
-	def spin_right(A,speed):B=speed;A.motor_run(1,0,B);A.motor_run(2,1,B)
+	def drive_stop(A,speed):A.motor_stop(3)
+	def drive_spin_left(A,speed):B=speed;A.motor_run(1,1,B);A.motor_run(2,0,B)
+	def drive_spin_right(A,speed):B=speed;A.motor_run(1,0,B);A.motor_run(2,1,B)
 	def get_range_cm(A):
 		A._f.write_digital(1);sleep_ms(1);A._f.write_digital(0)
 		if A._e.read_digital()==0:A._f.write_digital(0);A._f.write_digital(1);sleep_ms(20);A._f.write_digital(0);C=machine.time_pulse_us(A._e,1,500*58)
