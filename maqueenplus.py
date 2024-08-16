@@ -65,12 +65,19 @@ class MaqueenPlus:
 
     def __init__(
         self,
-        ultrasonic_trigger_pin: microbit.MicroBitDigitalPin,
-        ultrasonic_echo_pin: microbit.MicroBitDigitalPin,
+        ultrasonic_trigger_pin: microbit.MicroBitDigitalPin = None,
+        ultrasonic_echo_pin: microbit.MicroBitDigitalPin = None,
+        ultrasonic_sensor_model: str = "URM10",
     ):
-        # """Checks we can communicate with the robot.
-        # Proceeds if the version number is one that is supported by this driver.
-        # """
+        """Initialises MaqueenPlus robot. Checks we can communicate
+        with the robot. Only poroceeds if the board version number is
+        one that is supported by this driver.
+
+        This driver also supports the ultrasonic sensors shipped with
+        the MaqueenPlus V1 and V2 robots. The default is the "URM10"
+        that came with the V1. You can also configure it with "HC-SRO4"
+        that comes with the MaqueenPlus V2.
+        """
         while self._I2C_ROBOT_ADDR not in microbit.i2c.scan():
             if __debug__:
                 print("Could not find Maqueen on I2C")
@@ -99,6 +106,20 @@ class MaqueenPlus:
         self._ultrasonic_state = 0
         self._ultrasonic_trigger_pin = ultrasonic_trigger_pin
         self._ultrasonic_echo_pin = ultrasonic_echo_pin
+        if ultrasonic_sensor_model == "URM10":
+            self._ultrasonic_sensor_version = 1
+            if __debug__:
+                print("Seting ultrasonic sensor to v1")
+        elif ultrasonic_sensor_model.endswith("SRO4"):
+            self._ultrasonic_sensor_version = 2
+            if __debug__:
+                print("Seting ultrasonic sensor to v2")
+        else:
+            self._ultrasonic_sensor_version = -1
+            if __debug__:
+                print(
+                    "Ultrasonic sensor %s is not supported" % (ultrasonic_sensor_model)
+                )
         self._wheel_diameter_mm = self._WHEEL_DIAMETER_MM
         self.set_headlight_rgb(self.HEADLIGHT_BOTH, self.COLOR_OFF)
         self.motor_stop(self.MOTOR_BOTH)
@@ -160,17 +181,31 @@ class MaqueenPlus:
         self.motor_run(self.MOTOR_LEFT, self.MOTOR_DIR_FORWARD, speed)
         self.motor_run(self.MOTOR_RIGHT, self.MOTOR_DIR_BACKWARD, speed)
 
-    def get_range_cm(self):
+    def get_range_cm(self) -> int:
+
+        if self._ultrasonic_trigger_pin is None or self._ultrasonic_echo_pin is None:
+            if __debug__:
+                print("Ultrasonic pins are not set!")
+            return -1
+
+        if self._ultrasonic_sensor_version == 1:
+            return self._get_range_cm_v1()
+        elif self._ultrasonic_sensor_version == 2:
+            return self._get_range_cm_v2()
+        else:
+            return -1
+
+    def _get_range_cm_v1(self):
         # """Returns a range in cm from 2 to 500"""
 
-        data = self._read_ultrasonic()
+        data = self._read_ultrasonic_v1()
         if self._ultrasonic_state == 1 and data != 0:
             self._ultrasonic_state = 0
         tries = 0
 
         if self._ultrasonic_state == 0:
             while data == 0:
-                data = self._read_ultrasonic()
+                data = self._read_ultrasonic_v1()
                 tries += 1
                 if tries > 3:
                     self._ultrasonic_state = 1
@@ -181,7 +216,7 @@ class MaqueenPlus:
 
         return data
 
-    def _read_ultrasonic(self):
+    def _read_ultrasonic_v1(self):
         self._ultrasonic_trigger_pin.write_digital(0)
         if self._ultrasonic_echo_pin.read_digital() == 0:
             self._ultrasonic_trigger_pin.write_digital(0)
@@ -200,6 +235,38 @@ class MaqueenPlus:
                 self._ultrasonic_echo_pin, 0, self._MAX_DIST_CM * 58
             )
         x = d / 59
+        return round(x)
+
+    def _get_range_cm_v2(self):
+
+        self._ultrasonic_trigger_pin.write_digital(1)
+        sleep_ms(1)
+        self._ultrasonic_trigger_pin.write_digital(0)
+        if self._ultrasonic_echo_pin.read_digital() == 0:
+            self._ultrasonic_trigger_pin.write_digital(0)
+            self._ultrasonic_trigger_pin.write_digital(1)
+            sleep_ms(20)
+            self._ultrasonic_trigger_pin.write_digital(0)
+            d = machine.time_pulse_us(
+                self._ultrasonic_echo_pin, 1, self._MAX_DIST_CM * 58
+            )
+        else:
+            self._ultrasonic_trigger_pin.write_digital(1)
+            self._ultrasonic_trigger_pin.write_digital(0)
+            sleep_ms(20)
+            self._ultrasonic_trigger_pin.write_digital(0)
+            d = machine.time_pulse_us(
+                self._ultrasonic_echo_pin, 0, self._MAX_DIST_CM * 58
+            )
+
+        x = d / 59
+
+        if x <= 0:
+            return 0
+
+        if x >= self._MAX_DIST_CM:
+            return self._MAX_DIST_CM
+
         return round(x)
 
     def servo(self, servo, angle):
