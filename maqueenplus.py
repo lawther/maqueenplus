@@ -70,7 +70,7 @@ class MaqueenPlus:
         ultrasonic_sensor_model: str = "URM10",
     ):
         """Initialises MaqueenPlus robot. Checks we can communicate
-        with the robot. Only poroceeds if the board version number is
+        with the robot. Only proceeds if the board version number is
         one that is supported by this driver.
 
         This driver also supports the ultrasonic sensors shipped with
