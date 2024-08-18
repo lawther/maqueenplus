@@ -195,7 +195,7 @@ class MaqueenPlusV2:
         self.motor_run(self.MOTOR_LEFT, self.MOTOR_DIR_FORWARD, speed)
         self.motor_run(self.MOTOR_RIGHT, self.MOTOR_DIR_BACKWARD, speed)
 
-    def get_range_cm(self):
+    def get_range_cm(self) -> int:
         self._ultrasonic_trigger_pin.write_digital(1)
         sleep_ms(1)
         self._ultrasonic_trigger_pin.write_digital(0)
