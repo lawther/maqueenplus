@@ -11,7 +11,7 @@ class Box:
         self.id = raw_array[5]
 
     def __str__(self):
-        return "Box %d: centre(%d,%d) w,h(%d,%d)" % (
+        return "Box id(%d) centre(%d,%d) w,h(%d,%d)" % (
             self.id,
             self.centre_x,
             self.centre_y,
@@ -29,7 +29,7 @@ class Arrow:
         self.id = raw_array[5]
 
     def __str__(self):
-        return "Arrow %d: start(%d,%d) end(%d,%d)" % (
+        return "Arrow id(%d) start(%d,%d) end(%d,%d)" % (
             self.id,
             self.start_x,
             self.start_y,

@@ -3,10 +3,10 @@ _A=False
 import microbit,time
 class Box:
 	def __init__(A,raw_array):B=raw_array;A.centre_x=B[1];A.centre_y=B[2];A.width=B[3];A.height=B[4];A.id=B[5]
-	def __str__(A):return'Box %d: centre(%d,%d) w,h(%d,%d)'%(A.id,A.centre_x,A.centre_y,A.width,A.height)
+	def __str__(A):return'Box id(%d) centre(%d,%d) w,h(%d,%d)'%(A.id,A.centre_x,A.centre_y,A.width,A.height)
 class Arrow:
 	def __init__(A,raw_array):B=raw_array;A.start_x=B[1];A.start_y=B[2];A.end_x=B[3];A.end_y=B[4];A.id=B[5]
-	def __str__(A):return'Arrow %d: start(%d,%d) end(%d,%d)'%(A.id,A.start_x,A.start_y,A.end_x,A.end_y)
+	def __str__(A):return'Arrow id(%d) start(%d,%d) end(%d,%d)'%(A.id,A.start_x,A.start_y,A.end_x,A.end_y)
 class HuskyLens:
 	ALGORITHM_FACE_RECOGNITION=0;ALGORITHM_OBJECT_TRACKING=1;ALGORITHM_OBJECT_RECOGNITION=2;ALGORITHM_LINE_TRACKING=3;ALGORITHM_COLOR_RECOGNITION=4;ALGORITHM_TAG_RECOGNITION=5
 	def __init__(A):
