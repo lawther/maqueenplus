@@ -25,6 +25,7 @@ class MaqueenPlusV2:
 
     # Line Tracking Sensors
     _LINE_TRACK_REG = 0x1D
+    _LINE_TRACK_ANALOG_REG = 0x1E
 
     # Front Headlights
     HEADLIGHT_LEFT = 1
@@ -258,6 +259,20 @@ class MaqueenPlusV2:
                 ((bits >> 1) & 1) == 1,
                 ((bits >> 0) & 1) == 1,
             )
+
+    def line_track_analog(self):
+        self._i2c_write([self._LINE_TRACK_ANALOG_REG])
+
+        # we read 10 bytes, 16 bits per line tracking sensor
+        all_sensor_values = self._i2c_read(10)
+
+        return (
+            all_sensor_values[0] << 8 | all_sensor_values[1],
+            all_sensor_values[2] << 8 | all_sensor_values[3],
+            all_sensor_values[4] << 8 | all_sensor_values[5],
+            all_sensor_values[6] << 8 | all_sensor_values[7],
+            all_sensor_values[8] << 8 | all_sensor_values[9],
+        )
 
     def hsl_to_rgb(self, h, s, l):
         # """

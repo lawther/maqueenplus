@@ -71,6 +71,7 @@ class MaqueenPlus:
 		elif A>180:A=180
 		B._e([servo,A])
 	def line_track(B):B._e([29]);A=int.from_bytes(B._d(1),'big');return A>>0&1==1,A>>1&1==1,A>>2&1==1,A>>3&1==1,A>>4&1==1,A>>5&1==1
+	def line_track_analog(B):B._e([30]);A=B._d(12);return A[0]<<8|A[1],A[2]<<8|A[3],A[4]<<8|A[5],A[6]<<8|A[7],A[8]<<8|A[9],A[10]<<8|A[11]
 	def get_wheel_rotations(B):B._e([4]);A=B._d(4);C=(A[0]<<8|A[1])*10/900;D=(A[2]<<8|A[3])*10/900;return C,D
 	def clear_wheel_rotations(A,motor):
 		B=motor

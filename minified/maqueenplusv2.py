@@ -52,6 +52,7 @@ class MaqueenPlusV2:
 		B._c([29]);A=int.from_bytes(B._b(1),'big')
 		if B._h==0:return A>>0&1==1,A>>1&1==1,A>>2&1==1,A>>3&1==1,A>>4&1==1
 		else:return A>>4&1==1,A>>3&1==1,A>>2&1==1,A>>1&1==1,A>>0&1==1
+	def line_track_analog(B):B._c([30]);A=B._b(10);return A[0]<<8|A[1],A[2]<<8|A[3],A[4]<<8|A[5],A[6]<<8|A[7],A[8]<<8|A[9]
 	def hsl_to_rgb(G,h,s,l):
 		D=(1-abs(2*l-1))*s;E=D*(1-abs(h/60%2-1));F=l-D/2
 		if 0<=h<60:A,B,C=D,E,0
