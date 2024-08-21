@@ -66,8 +66,8 @@ class MaqueenPlus:
 
     def __init__(
         self,
-        ultrasonic_trigger_pin: microbit.MicroBitDigitalPin = None,
-        ultrasonic_echo_pin: microbit.MicroBitDigitalPin = None,
+        ultrasonic_trigger_pin: microbit.MicroBitDigitalPin | None = None,
+        ultrasonic_echo_pin: microbit.MicroBitDigitalPin | None = None,
         ultrasonic_sensor_model: str = "URM10",
     ):
         """Initialises MaqueenPlus robot. Checks we can communicate
