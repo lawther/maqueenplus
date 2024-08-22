@@ -312,10 +312,10 @@ class MaqueenPlusV2:
             self._neo_pixel[light] = rgb_tuple
             self._neo_pixel.show()
 
-    def set_underglow(self, rgb_tuple) -> None:
+    def set_underglow_all(self, rgb_tuple) -> None:
         for i in range(self._NEO_PIXEL_COUNT):
             self._neo_pixel[i] = rgb_tuple
         self._neo_pixel.show()
 
     def set_underglow_off(self) -> None:
-        self.set_underglow((0, 0, 0))
+        self.set_underglow_all((0, 0, 0))

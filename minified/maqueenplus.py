@@ -1,10 +1,9 @@
-_A=None
 import machine,math
 from time import sleep_ms
 import microbit
 class MaqueenPlus:
 	HEADLIGHT_LEFT=1;HEADLIGHT_RIGHT=2;HEADLIGHT_BOTH=3;COLOR_RED=1;COLOR_GREEN=2;COLOR_YELLOW=3;COLOR_BLUE=4;COLOR_PINK=5;COLOR_CYAN=6;COLOR_WHITE=7;COLOR_OFF=8;MOTOR_LEFT=1;MOTOR_RIGHT=2;MOTOR_BOTH=3;MOTOR_DIR_STOP=0;MOTOR_DIR_FORWARD=1;MOTOR_DIR_BACKWARD=2;SERVO_S1=20;SERVO_S2=21;SERVO_S3=22
-	def __init__(A,ultrasonic_trigger_pin=_A,ultrasonic_echo_pin=_A,ultrasonic_sensor_model='URM10'):
+	def __init__(A,ultrasonic_trigger_pin,ultrasonic_echo_pin,ultrasonic_sensor_model='URM10'):
 		D=ultrasonic_sensor_model;C=False
 		while 16 not in microbit.i2c.scan():microbit.display.show(microbit.Image.NO);sleep_ms(1000)
 		B=C
@@ -16,15 +15,16 @@ class MaqueenPlus:
 		if D=='URM10':A._h=1
 		elif D.endswith('SRO4'):A._h=2
 		else:A._h=-1
-		A._m=42;A.set_headlight_rgb(3,8);A.motor_stop(3);A.clear_wheel_rotations(3);microbit.display.show(microbit.Image.YES);microbit.display.clear()
+		A._m=42;A.set_headlight_color(3,8);A.motor_stop(3);A.clear_wheel_rotations(3);microbit.display.show(microbit.Image.YES);microbit.display.clear()
 	def _e(A,buf):microbit.i2c.write(16,bytes(buf))
 	def _d(A,count):return microbit.i2c.read(16,count)
 	def _a(A):A._e([50]);B=int.from_bytes(A._d(1),'big');A._e([51]);C=A._d(B);D=''.join([chr(A)for A in C]);return D
-	def set_headlight_rgb(B,light,color):
+	def set_headlight_color(B,light,color):
 		C=light;A=color
 		if C==1:B._e([11,A])
 		elif C==2:B._e([12,A])
 		elif C==3:B._e([11,A,A])
+	def set_headlight_off(A,light):A.set_headlight_color(light,8)
 	def motor_run(B,motor,dir,speed):
 		C=motor;A=speed
 		if A>240:A=240
@@ -38,7 +38,7 @@ class MaqueenPlus:
 	def drive_spin_left(A,speed):B=speed;A.motor_run(1,2,B);A.motor_run(2,1,B)
 	def drive_spin_right(A,speed):B=speed;A.motor_run(1,1,B);A.motor_run(2,2,B)
 	def get_range_cm(A):
-		if A._j is _A or A._g is _A:return-1
+		if A._j is None or A._g is None:return-1
 		if A._h==1:return A._b()
 		elif A._h==2:return A._c()
 		else:return-1

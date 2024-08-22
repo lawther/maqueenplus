@@ -66,7 +66,7 @@ class MaqueenPlusV2:
 	def set_underglow_light(B,light,rgb_tuple):
 		A=light
 		if A>=0 and A<4:B._d[A]=rgb_tuple;B._d.show()
-	def set_underglow(A,rgb_tuple):
+	def set_underglow_all(A,rgb_tuple):
 		for B in range(4):A._d[B]=rgb_tuple
 		A._d.show()
-	def set_underglow_off(A):A.set_underglow((0,0,0))
+	def set_underglow_off(A):A.set_underglow_all((0,0,0))

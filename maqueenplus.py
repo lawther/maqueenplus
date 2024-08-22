@@ -66,8 +66,8 @@ class MaqueenPlus:
 
     def __init__(
         self,
-        ultrasonic_trigger_pin: microbit.MicroBitDigitalPin | None = None,
-        ultrasonic_echo_pin: microbit.MicroBitDigitalPin | None = None,
+        ultrasonic_trigger_pin: microbit.MicroBitDigitalPin,
+        ultrasonic_echo_pin: microbit.MicroBitDigitalPin,
         ultrasonic_sensor_model: str = "URM10",
     ):
         """Initialises MaqueenPlus robot. Checks we can communicate
@@ -122,7 +122,7 @@ class MaqueenPlus:
                     "Ultrasonic sensor %s is not supported" % (ultrasonic_sensor_model)
                 )
         self._wheel_diameter_mm = self._WHEEL_DIAMETER_MM
-        self.set_headlight_rgb(self.HEADLIGHT_BOTH, self.COLOR_OFF)
+        self.set_headlight_color(self.HEADLIGHT_BOTH, self.COLOR_OFF)
         self.motor_stop(self.MOTOR_BOTH)
         self.clear_wheel_rotations(self.MOTOR_BOTH)
 
@@ -146,13 +146,16 @@ class MaqueenPlus:
         version_str = "".join([chr(b) for b in version_bytes])
         return version_str
 
-    def set_headlight_rgb(self, light, color):
+    def set_headlight_color(self, light, color):
         if light == self.HEADLIGHT_LEFT:
             self._i2c_write([self._RGB_LEFT_REG, color])
         elif light == self.HEADLIGHT_RIGHT:
             self._i2c_write([self._RGB_RIGHT_REG, color])
         elif light == self.HEADLIGHT_BOTH:
             self._i2c_write([self._RGB_LEFT_REG, color, color])
+
+    def set_headlight_off(self, light):
+        self.set_headlight_color(light, self.COLOR_OFF)
 
     def motor_run(self, motor, dir, speed):
         if speed > 240:
@@ -242,7 +245,6 @@ class MaqueenPlus:
         return round(x)
 
     def _get_range_cm_v2(self):
-
         self._ultrasonic_trigger_pin.write_digital(1)
         sleep_ms(1)
         self._ultrasonic_trigger_pin.write_digital(0)
