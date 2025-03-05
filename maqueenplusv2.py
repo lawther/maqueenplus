@@ -7,7 +7,6 @@ from neopixel import NeoPixel
 
 
 class MaqueenPlusV2:
-
     # Microbit I2C secondary, in our case the Maqueen robot
     _I2C_ROBOT_ADDR = 0x10
 
@@ -109,7 +108,7 @@ class MaqueenPlusV2:
             sleep_ms(1000)
 
         valid_version = False
-        while valid_version == False:
+        while not valid_version:
             version = self._get_board_version()
             version_num = version[-3:]
             if __debug__:
@@ -119,7 +118,7 @@ class MaqueenPlusV2:
             self._version_minor = int(version_num[2])
             if self._version_major == 2 and self._version_minor == 1:
                 valid_version = True
-            if valid_version == False:
+            if not valid_version:
                 if __debug__:
                     print(
                         "Version %d.%d is not supported"

@@ -6,7 +6,6 @@ import microbit
 
 
 class MaqueenPlus:
-
     # Microbit I2C secondary, in our case the Maqueen robot
     _I2C_ROBOT_ADDR = 0x10
 
@@ -86,7 +85,7 @@ class MaqueenPlus:
             sleep_ms(1000)
 
         valid_version = False
-        while valid_version == False:
+        while not valid_version:
             version = self._get_board_version()
             version_num = version[-3:]
             if __debug__:
@@ -96,7 +95,7 @@ class MaqueenPlus:
             self._version_minor = int(version_num[2])
             if self._version_major == 1 and self._version_minor == 4:
                 valid_version = True
-            if valid_version == False:
+            if not valid_version:
                 if __debug__:
                     print(
                         "Version %d.%d is not supported"
@@ -189,7 +188,6 @@ class MaqueenPlus:
         self.motor_run(self.MOTOR_RIGHT, self.MOTOR_DIR_BACKWARD, speed)
 
     def get_range_cm(self) -> int:
-
         if self._ultrasonic_trigger_pin is None or self._ultrasonic_echo_pin is None:
             if __debug__:
                 print("Ultrasonic pins are not set!")
