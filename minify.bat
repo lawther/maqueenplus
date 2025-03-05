@@ -8,7 +8,7 @@ echo Minification complete
 goto :EOF
 
 :minify
-:: Minify a file and report befoe and after size
+:: Minify a file and report before and after size
 set filename=%1.py
 python constant_replacer.py %filename%
 python minimal_renamer.py %1-decon.py
